@@ -21,6 +21,22 @@ const PRODUCTS = [
   'ladybird',
 ];
 
+const PASS_STATUS_CODE = 'P';
+
+const getSummaryCounts = (value: any): [number, number] | null => {
+  if (!value?.c) {
+    return null;
+  }
+
+  const subtestPasses = value.c[0] ?? 0;
+  const subtestTotal = value.c[1] ?? 0;
+  // summary_v2 omits harness-only tests from c totals; add them back to match wpt.fyi Subtest Total.
+  const hasHarnessOnlyResult = subtestTotal === 0;
+  const harnessPass = hasHarnessOnlyResult && value.s === PASS_STATUS_CODE ? 1 : 0;
+
+  return [subtestPasses + harnessPass, subtestTotal + (hasHarnessOnlyResult ? 1 : 0)];
+};
+
 const App: React.FC = () => {
   const { tokens } = useTheme();
 
@@ -85,10 +101,11 @@ const App: React.FC = () => {
               const summary = await response.json();
               const browserMap: Record<string, [number, number]> = {};
               for (const [path, value] of Object.entries(summary) as [string, any][]) {
-                if (value?.c) {
-                  passes += value.c[0] ?? 0;
-                  total += value.c[1] ?? 0;
-                  browserMap[path] = [value.c[0] ?? 0, value.c[1] ?? 0];
+                const counts = getSummaryCounts(value);
+                if (counts) {
+                  passes += counts[0];
+                  total += counts[1];
+                  browserMap[path] = counts;
                 }
               }
               latestSummaries.set(run.browser_name, browserMap);
