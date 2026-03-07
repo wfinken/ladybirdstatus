@@ -329,7 +329,9 @@ const App: React.FC = () => {
               />
             )}
 
-            <div className={`relative ${chartFrameClass} ui-chart-frame ui-radius overflow-hidden flex items-center justify-center shadow-inner`}>
+            <div
+              className={`relative ${chartFrameClass} ui-chart-frame ui-radius overflow-hidden flex items-center justify-center shadow-inner view-main-card`}
+            >
               {viewMode === 'vector' && dataHistory.length > 0 && <VectorFieldView dataHistory={dataHistory} />}
               {viewMode === 'velocity' && dataHistory.length > 0 && <VelocityView dataHistory={dataHistory} />}
               {viewMode === 'explorer' && (

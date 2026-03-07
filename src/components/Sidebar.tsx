@@ -122,7 +122,10 @@ const Sidebar: React.FC<SidebarProps> = ({ dataHistory, totalGain, runCount = 25
         </div>
       </div>
 
-      <div className="ui-card p-5 relative overflow-hidden" style={{ background: tokens.ui.successSoft, borderColor: tokens.ui.success }}>
+      <div
+        className="ui-card p-5 relative overflow-hidden run-growth-card"
+        style={{ background: tokens.ui.successSoft, borderColor: tokens.ui.success }}
+      >
         <div className="flex items-center gap-2 text-[10px] font-black uppercase mb-2" style={{ color: tokens.ui.success }}>
           <TrendingUp className="w-3.5 h-3.5" /> {runCount}-Run Growth
         </div>

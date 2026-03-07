@@ -8,7 +8,7 @@ interface ViewInfoCardProps {
 
 const ViewInfoCard: React.FC<ViewInfoCardProps> = ({ title, description, instructions }) => {
   return (
-    <div className="w-full ui-card p-5 flex flex-col gap-4 shrink-0">
+    <div className="w-full ui-card p-5 flex flex-col gap-4 shrink-0 view-description-card">
       <div className="flex flex-col gap-1">
         <h3 className="ui-text font-bold text-sm tracking-wide">{title}</h3>
         <p className="ui-text-muted text-xs leading-relaxed max-w-4xl">{description}</p>

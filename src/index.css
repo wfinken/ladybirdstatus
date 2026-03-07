@@ -251,6 +251,26 @@ h6 {
   background-image: none;
 }
 
+[data-style='nebula'] .view-main-card,
+[data-style='shadcn'] .view-main-card,
+[data-style='yaru'] .view-main-card {
+  box-shadow:
+    var(--panel-shadow),
+    inset 0 0 0 1px color-mix(in srgb, var(--ui-border), transparent 55%);
+}
+
+[data-style='nebula'] .view-description-card,
+[data-style='shadcn'] .view-description-card,
+[data-style='yaru'] .view-description-card {
+  box-shadow: var(--panel-shadow);
+}
+
+[data-style='nebula'] .run-growth-card,
+[data-style='shadcn'] .run-growth-card,
+[data-style='yaru'] .run-growth-card {
+  box-shadow: var(--panel-shadow);
+}
+
 [data-style='macos'] {
   --mac-glass-surface: rgba(255, 255, 255, 0.42);
   --mac-glass-border: rgba(255, 255, 255, 0.42);
