@@ -217,6 +217,27 @@ const App: React.FC = () => {
           ? 'aspect-square'
           : 'aspect-[16/10]';
 
+  const latestLadybirdCoverage = useMemo(() => {
+    const latestRun = dataHistory[0];
+    if (!latestRun) {
+      return null;
+    }
+
+    const ladybird = latestRun.engines.find((engine: any) => engine.rawName === 'ladybird');
+    if (!ladybird) {
+      return null;
+    }
+
+    const percent = ladybird.total > 0 ? (ladybird.passes / ladybird.total) * 100 : 0;
+    return {
+      sha: latestRun.sha,
+      passes: ladybird.passes,
+      total: ladybird.total,
+      percent: Math.min(100, Math.max(0, percent)),
+      date: latestRun.date,
+    };
+  }, [dataHistory]);
+
   const metrics = useMemo(() => {
     if (dataHistory.length < 2) {
       return null;
@@ -296,6 +317,48 @@ const App: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 flex flex-col gap-5">
+            <div className="w-full ui-card p-5 flex flex-col gap-3 shrink-0">
+              <div className="flex flex-col gap-1">
+                <h3 className="ui-text font-bold text-sm tracking-wide">Latest Ladybird Test Coverage</h3>
+                <p className="ui-text-muted text-xs leading-relaxed">Most recent test run summary</p>
+              </div>
+
+              {latestLadybirdCoverage ? (
+                <>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <p className="text-xs ui-text-muted">
+                      {latestLadybirdCoverage.passes.toLocaleString()} / {latestLadybirdCoverage.total.toLocaleString()} passing
+                    </p>
+                    <p className="font-mono text-xs ui-text-subtle">
+                      {latestLadybirdCoverage.percent.toFixed(1)}%
+                    </p>
+                  </div>
+                  <div
+                    className="h-2.5 w-full rounded-full border ui-radius overflow-hidden"
+                    style={{ background: 'var(--ui-control-bg)', borderColor: 'var(--ui-border)' }}
+                  >
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{
+                        width: `${latestLadybirdCoverage.percent}%`,
+                        background:
+                          latestLadybirdCoverage.percent >= 90
+                            ? 'var(--ui-success)'
+                            : latestLadybirdCoverage.percent >= 70
+                              ? 'var(--ui-warning)'
+                              : 'var(--ui-danger)',
+                      }}
+                    />
+                  </div>
+                  <p className="text-[11px] ui-text-subtle">
+                    Latest run: {latestLadybirdCoverage.sha} • {latestLadybirdCoverage.date}
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs ui-text-subtle">No latest Ladybird coverage data available.</p>
+              )}
+            </div>
+
             {viewMode === 'vector' && (
               <ViewInfoCard title="Vector Field View" description="Tracks total subtest passes for all browser engines over aligned historical runs." />
             )}
